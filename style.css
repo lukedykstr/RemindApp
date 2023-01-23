@@ -1,9 +1,15 @@
 html, body {
+  display:inline;
+  
   background-color:#ffcce6;
   height: 100%;
   width: 100%;
 }
-
+#Canvas{
+  position: absolute;
+  left:25%;
+  top:20%;
+}
 h1{
   padding:15px;
   font-size:50px;
@@ -25,7 +31,6 @@ h1{
   position: absolute;
   top:20%;
   left:0px;
-  width:20%;
   height:100%;
   border-width:5px;
   border-right: 5px solid;

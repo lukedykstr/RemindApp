@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <title>replit</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
   <div id="MainHeader">
     <h1>Reminderer</h1>
   </div>
@@ -15,14 +14,21 @@
 
 <body>
   <script src="script.js"></script>
-  <ul id="LeftColumn">
-    <li><button class="DisplayButtons">Daily View</button></li>
-    <li><button class="DisplayButtons">Weekly View</button></li>
-    <li><button class="DisplayButtons">Monthly View</button></li>
-    <li><button class="DisplayButtons">Settings</button></li>
-  </ul>
+  <div>
+    <ul id="LeftColumn">
+      <li><button onclick="CloneNode()" class="DisplayButtons" id="Create">Create</button></li>
+      <li><button class="DisplayButtons">Daily View</button></li>
+      <li><button class="DisplayButtons">Weekly View</button></li>
+      <li><button class="DisplayButtons">Monthly View</button></li>
+      <li><button class="DisplayButtons">Settings</button></li>
+    </ul>
+  </div>
 
-  <script src="https://replit.com/public/js/replit-badge.js" theme="blue" defer></script> 
+  <div id="Canvas">
+    <h1>Testasdffffffffffffffffffffffffff</h1>
+    <hr>
+    <hr>
+  </div>
 </body>
 
 </html>
