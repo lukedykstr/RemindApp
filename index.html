@@ -6,29 +6,59 @@
   <meta name="viewport" content="width=device-width">
   <title>replit</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
   <div id="MainHeader">
     <h1>Reminderer</h1>
   </div>
 </head>
 
 <body>
-  <script src="script.js"></script>
-  <div>
-    <ul id="LeftColumn">
-      <li><button onclick="CloneNode()" class="DisplayButtons" id="Create">Create</button></li>
-      <li><button class="DisplayButtons">Daily View</button></li>
-      <li><button class="DisplayButtons">Weekly View</button></li>
-      <li><button class="DisplayButtons">Monthly View</button></li>
-      <li><button class="DisplayButtons">Settings</button></li>
-    </ul>
+  <div id="LeftColumn">
+    <button onclick="openForm()" class="DisplayButtons" id="Create">Create</button>
+    <button class="DisplayButtons">Daily View</button>
+    <button class="DisplayButtons">Weekly View</button>
+    <button class="DisplayButtons">Monthly View</button>
+    <button class="DisplayButtons">Settings</button>
+
+
   </div>
 
+  <!-- Will fix dont touch this form for now-->
+
+  <div class="form-popup" id="myForm">
+    <form action="/action_page.php" class="form-container">
+      <h1>Login</h1>
+
+      <label><b>Header</b></label>
+      <input type="text" placeholder="Enter Header" name="header" id="HEADER" required>
+      <br>
+      <label><b>Body </b></label>
+      <input type="text" placeholder="Enter Body" name="body" id="bodyText" required>
+      <br>
+      <label><b>Date: </b></label>
+      <input type="date" id="DATE" name="date">
+      <br>
+      <label><b>Time: </b></label>
+      <input type="time" id="TIME" name="time">
+      <br>
+      <button type="button" class="btn enter" onclick="createNode();closeForm()">Enter</button>
+      <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+  </div>
+
+
+
+  <div id="BackgroundDim"></div>
+
+
   <div id="Canvas">
-    <h1>Testasdffffffffffffffffffffffffff</h1>
+    <h1>Daily View</h1>
     <hr>
     <hr>
   </div>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
