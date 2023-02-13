@@ -4,31 +4,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  
+  <title>RemindApp</title>
+  
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <!-- links for font 'Jost' from Google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+
+  <!-- library for downloading files to user's device -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
+  <!-- library for JS unit testing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
+  
   <div id="MainHeader">
     <h1>Reminderer</h1>
+    <p id="TodaysDate"></p><br>
+    <p>Upload data: <input id="file" type="file" accept=".remind" style="width:auto;" onchange="load()">
+    <button id="save" onclick="save()">Download data</button></p>
   </div>
 </head>
 
 <body>
   <div id="LeftColumn">
-    <button onclick="openForm()" class="DisplayButtons" id="Create">Create</button>
-    <button class="DisplayButtons">Daily View</button>
+    <button onclick="openForm('reminder')" class="DisplayButtons" id="Create">Create</button>
+    <button onclick="refreshScreen()" class="DisplayButtons">Daily View</button>
     <button class="DisplayButtons">Weekly View</button>
     <button class="DisplayButtons">Monthly View</button>
-    <button class="DisplayButtons">Settings</button>
-
-
+    <button onclick="openForm('settings')" class="DisplayButtons">Settings</button>
   </div>
 
   <!-- Will fix dont touch this form for now-->
 
   <div class="form-popup" id="myForm">
     <form action="/action_page.php" class="form-container">
-      <h1>Login</h1>
+      <h2 id="form-title">Login</h1>
 
       <label><b>Header</b></label>
       <input type="text" placeholder="Enter Header" name="header" id="HEADER" required>
@@ -42,18 +53,31 @@
       <label><b>Time: </b></label>
       <input type="time" id="TIME" name="time">
       <br>
-      <button type="button" class="btn enter" onclick="createNode();closeForm()">Enter</button>
+      <button type="button" class="btn enter" onclick="createNode();closeForm();refreshScreen()">Enter</button>
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
   </div>
-
-
-
   <div id="BackgroundDim"></div>
 
-
   <div id="Canvas">
-    <h1>Daily View</h1>
+    <div id="CanvasHeader">
+      <button class="DateChangeButton" onclick="changeDate(-7)">
+        <i class="arrow left"></i>
+        <i class="arrow left"></i>
+      </button>
+      <button class="DateChangeButton" onclick="changeDate(-1)">
+        <i class="arrow left"></i>
+      </button>
+      <h1 id="DailyView">Daily View </h1>
+      <button class="DateChangeButton" onclick="changeDate(1)">
+        <i class="arrow right"></i>
+      </button>
+      <button class="DateChangeButton" onclick="changeDate(7)">
+        <i class="arrow right"></i>
+        <i class="arrow right"></i>
+      </button>
+    </div>
+    <input type="date" id="DisDate" name="date" onchange="calSubmit()">
     <hr>
     <hr>
   </div>

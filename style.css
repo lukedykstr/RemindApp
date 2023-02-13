@@ -1,3 +1,7 @@
+* {
+  font-family: 'Jost', sans-serif;
+}
+
 html, body {
   display:inline;
   
@@ -5,12 +9,14 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
 #Canvas{
   position: absolute;
   left:20%;
   top:20%;
   width:60%;
 }
+
 h1{
   padding:15px;
   font-size:50px;
@@ -18,7 +24,7 @@ h1{
 
 #MainHeader{
   width:100%;
-  height: 20%;
+  height: 30%;
   position: absolute;
   top:0px;
   left:0px;
@@ -29,9 +35,15 @@ h1{
   border-color:black;
 }
 
+#MainHeader>p{
+  margin-left: 40px;
+  margin-top: -40px;
+  
+}
+
 #LeftColumn{
   position: absolute;
-  top:20%;
+  top:27%;
   left:0px;
   height:100%;
   width: 15%;
@@ -95,7 +107,7 @@ h1{
 }
 
 #BackgroundDim{
-display:none;
+  display:none;
   position: fixed;
   left:0px;
   top:0px;
@@ -127,3 +139,45 @@ display:none;
 .RemindP{
   margin: 500 px;
 }
+
+
+
+
+
+/*Arrow formatting*/
+
+#CanvasHeader{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#DailyView{
+  text-align:center;
+  
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+}
+
