@@ -1,27 +1,17 @@
+// today's date. will stay the same
+var TodaysDate = new Date().toLocaleDateString('en-US');
+// the date that's currently being viewed. starts as today's date. will change
+var DisplayDate = TodaysDate;
+
 // list to hold user settings
 var settings = {
-  email: "user@gmail.com",
-  phone: "6167778888"
-}
+  email: "",
+  phone: ""
+};
 
 // create list to hold reminders
-var reminders = [
-  {
-    header: "Test Reminder",
-    body: "this is a test.",
-    date: "2/8/2023",
-    time: "12:00:00PM"
-  },
-  {
-    header: "Reminder 2",
-    body: "another reminder",
-    date: "2/9/2023",
-    time: "1:30:00AM"
-  }
-]
-
-// load reminders with date 3/4/2023
-//loadReminders("3/4/2023");
+// [{header, body, date, time}, {...}, ...]
+var reminders = [];
 
 //trying to figure out how to create html objects using javascript
 function createNode() {
@@ -41,7 +31,14 @@ function createNode() {
   doc.appendChild(bodyText);
 
   var dateFormat = document.createElement("time");
-  dateFormat.innerHTML = document.getElementById("DATE").value;
+  
+  // date value from date input is in YYYY-MM-DD form and is one day behind
+  // for some reason, idk why
+  // this changes it to MM/DD/YYYY and increments it by 1
+  var date = new Date(document.getElementById("DATE").value);
+  date.setDate(date.getDate() + 1);
+  
+  dateFormat.innerHTML = date.toLocaleDateString('en-US');
   doc.appendChild(dateFormat);
 
   doc.appendChild(breakLine);
@@ -51,25 +48,23 @@ function createNode() {
   doc.appendChild(timeFormat);
 
   document.getElementById("Canvas").append(doc)
-
+  
   // add reminder to list
   createReminder(text.innerHTML, bodyText.innerHTML, dateFormat.innerHTML, timeFormat.innerHTML);
-  clearScreen();
+  save();
   //window.setTimeout(CloneNode, 0);
 }
 
-
-var DisplayDate = new Date();
-
 function refreshScreen() {
   let get = Array.from(document.getElementsByClassName('RemindBubble'));
+  
   get.forEach(element => {
     element.remove();
   });
+  
   document.getElementById("DailyView").innerHTML = "Daily View: " + DisplayDate;
   document.getElementById("DisDate").value = new Date(DisplayDate).toISOString().split('T')[0];
   loadReminders(DisplayDate);
-
 }
 
 function incrementDate(dateInput, increment) {
@@ -84,7 +79,7 @@ function changeDate(amount) {
 }
 
 function calSubmit(){
-  DisplayDate = new Date(incrementDate(document.getElementById("DisDate").value,1)).toLocaleDateString('en-US');
+  DisplayDate = new Date(incrementDate(document.getElementById("DisDate").value, 1)).toLocaleDateString('en-US');
   refreshScreen();
 }
 
@@ -160,35 +155,36 @@ function loadNode(data) {
 
 // save data from object to JSON file
 function save() {
-  var text = JSON.stringify([reminders, settings]);
-  download(text, "data.remind", "text/plain");
+  var remindJSON  = JSON.stringify(reminders);
+  var settingJSON = JSON.stringify(settings);
+  
+  localStorage.setItem("reminders", remindJSON);
+  localStorage.setItem("settings", settingJSON);
 }
 
 // load data from file input element
 function load() {
-  var fileInput = document.getElementById("file");
+  reminders = JSON.parse(localStorage.getItem("reminders"));
+  settings  = JSON.parse(localStorage.getItem("settings"));
 
-  if(fileInput.files.length > 0) {
-    var reader = new FileReader();
+  // if no file exists
+  if(reminders == null) {
+    // set to default values
+    settings = {
+      email: "",
+      phone: ""
+    };
 
-    reader.addEventListener("load", (e) => {
-      data = JSON.parse(reader.result);
-      reminders = data[0];
-      settings  = data[1];
-    });
-    
-    reader.readAsText(fileInput.files[0]);
+    reminders = [];
   }
 }
 
 window.onload = function init() {
-  var TodaysDate = new Date().toLocaleDateString('en-US');
-  DisplayDate = TodaysDate;
-  document.getElementById("DailyView").innerHTML = "Daily View: " + DisplayDate;
-  document.getElementById("DisDate").value = new Date(DisplayDate).toISOString().split('T')[0];
+  document.getElementById("DailyView").innerHTML = "Daily View: " + TodaysDate;
+  document.getElementById("DisDate").value = new Date(TodaysDate).toISOString().split('T')[0];
 
   document.getElementById("TodaysDate").innerHTML = TodaysDate;
 
+  load();
   refreshScreen();
-
 }

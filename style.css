@@ -24,32 +24,35 @@ h1{
 
 #MainHeader{
   width:100%;
-  height: 30%;
+  height: 20%;
   position: absolute;
   top:0px;
   left:0px;
   /*border-radius:10px;*/
   background-color:#99ccff;
-
+padding-bottom: 5px;
   border-bottom: 5px solid;
   border-color:black;
+}
+#MainHeader > *{
+  padding-bottom: 5px;
 }
 
 #MainHeader>p{
   margin-left: 40px;
   margin-top: -40px;
-  
 }
 
 #LeftColumn{
   position: absolute;
-  top:27%;
+  top:18.8%;
   left:0px;
   height:100%;
   width: 15%;
   margin-top: 20px;
   margin-left: 10px;
   padding-right: 5px;
+  padding-top: 10px;
   border-width:5px;
   border-right: 5px solid;
   border-color:black;
@@ -128,7 +131,8 @@ h1{
   border: 5px solid black;
   border-radius: 10px;
   background-color:#ff80c1;
-  
+  padding-left: 15px;
+  padding-bottom: 15px;
 }
 
 .RemindH{
