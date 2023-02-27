@@ -9,7 +9,7 @@ var settings = {
   phone: ""
 };
 
-// create list to hold reminders
+// list to hold reminders
 // [{header, body, date, time}, {...}, ...]
 var reminders = [];
 
@@ -117,13 +117,14 @@ function createReminder(header, body, date, time) {
 function loadReminders(date) {
   for (var i = 0; i < reminders.length; i++) {
     if (date == "all" || reminders[i].date == date) {
-      loadNode(reminders[i]);
+      loadNode(i);
     }
   }
 }
 
-// create a single reminder node given object data
-function loadNode(data) {
+// create a single reminder node given index in reminders list
+function loadNode(index) {
+  var data = reminders[index];
   var breakLine = document.createElement("br");
 
   var doc = document.createElement("div");
@@ -150,7 +151,37 @@ function loadNode(data) {
   timeFormat.innerHTML = data.time;
   doc.appendChild(timeFormat);
 
+  doc.appendChild(document.createElement("br"));
+
+  var buttonDiv = document.createElement("div");
+  buttonDiv.style = "display:inline-block;";
+
+  var editButton = document.createElement("button");
+  editButton.innerHTML = "Edit";
+  editButton.setAttribute("onclick", "editReminder(" + index + ")");
+
+  var deleteButton = document.createElement("button");
+  deleteButton.innerHTML = "Delete";
+  deleteButton.setAttribute("onclick", "deleteReminder(" + index + ")");
+
+  buttonDiv.appendChild(editButton);
+  buttonDiv.appendChild(deleteButton);
+
+  doc.appendChild(buttonDiv);
+
   document.getElementById("Canvas").appendChild(doc);
+}
+
+// work in progress. will open form to edit a certain reminder
+function editReminder(index) {
+  
+}
+
+// pops item from reminders list, saves, refreshes
+function deleteReminder(index) {
+  reminders.pop(index);
+  save();
+  refreshScreen();
 }
 
 // save data from object to JSON file
