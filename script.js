@@ -1,25 +1,26 @@
 // today's date. will stay the same
-var TodaysDate = new Date();
+let TodaysDate = new Date();
+TodaysDate.setHours(0, 0, 0, 0);
 // the date that's currently being viewed. starts as today's date. will change
-var DisplayDate = TodaysDate;
+let DisplayDate = TodaysDate;
 
 // list to hold user settings
-var settings = {
+let settings = {
   email: "",
   phone: ""
 };
 
 // list to hold reminders
 // [{header, body, date, time}, {...}, ...]
-var reminders = [];
+let reminders = [];
 
-var headerInput = document.getElementById("HEADER");
-var bodyInput = document.getElementById("bodyText");
-var dateInput = document.getElementById("DATE");
-var timeInput = document.getElementById("TIME");
+let headerInput = document.getElementById("HEADER");
+let bodyInput = document.getElementById("bodyText");
+let dateInput = document.getElementById("DATE");
+let timeInput = document.getElementById("TIME");
 
-var emailInput = document.getElementById("email");
-var phoneInput = document.getElementById("phone");
+let emailInput = document.getElementById("email");
+let phoneInput = document.getElementById("phone");
 
 //trying to figure out how to create html objects using javascript
 function createNode() {
@@ -61,28 +62,29 @@ function createNode() {
 }
 
 function formEnter() {
-  if(headerInput.value == "") {
+  if (headerInput.value === "") {
     alert("Header cannot be blank.");
     return 0;
   }
 
-  if(dateInput.value == "") {
+  if (dateInput.value === "") {
     alert("Date cannot be blank.");
     return 0;
   }
 
-  if(timeInput.value == "") {
+  if (timeInput.value === "") {
     alert("Time cannot be blank.");
     return 0;
   }
 
-  TodaysDate = new Date();
+  var inputDate = incrementDate(dateInput.valueAsDate, 1);
+  inputDate.setHours(0, 0, 0, 0);
 
-  if(new Date(dateInput.value).getTime() + 86400000 < TodaysDate.getTime()) {
+  if (inputDate < TodaysDate) {
     alert("Date cannot be in the past.");
     return 0;
   }
-  
+
   createNode();
   closeForm();
   refreshScreen();
@@ -91,6 +93,7 @@ function formEnter() {
 function dateString(date) {
   return date.toLocaleString("en-US").split(",")[0];
 }
+
 
 function refreshScreen() {
   var date = dateString(DisplayDate);
@@ -108,6 +111,7 @@ function refreshScreen() {
 function incrementDate(dateInput, increment) {
   return new Date(dateInput.getTime() + (86400000 * increment));
 }
+//module.exports = incrementDate;
 
 function changeDate(amount) {
   DisplayDate =
@@ -142,7 +146,7 @@ function closeForm() {
 function openSettings() {
   emailInput.value = settings.email;
   phoneInput.value = settings.phone;
-  
+
   document.getElementById("settingsForm").style.display = "block";
   document.getElementById("BackgroundDim").style.display = "block";
 }
@@ -155,7 +159,7 @@ function closeSettings() {
 function settingsEnter() {
   settings.email = emailInput.value;
   settings.phone = phoneInput.value;
-  
+
   save();
   closeSettings();
 }
@@ -163,15 +167,9 @@ function settingsEnter() {
 //closeForm();
 
 function createReminder(header, body, date, time) {
-  reminders.push({ body, date, header, time });
-  /*
-  reminders.push({
-    header: header,
-    body: body,
-    date: date,
-    time: time
-  });
-  */
+  const reminder = { body, date, header, time };
+  reminders.push(reminder);
+  return reminder;
 }
 
 // load reminders from list given a specific date
@@ -280,12 +278,15 @@ function load() {
 }
 
 window.onload = function init() {
-  var date = dateString(TodaysDate);
-  
+  var date = dateString(DisplayDate);
+
   document.getElementById("DailyView").innerHTML = "Daily View: " + date;
-  document.getElementById("DisDate").valueAsDate = TodaysDate;
   document.getElementById("TodaysDate").innerHTML = date;
 
   load();
   refreshScreen();
 };
+
+
+//needs to be commetted out if not testing
+module.exports = {dateString, incrementDate, createReminder};
