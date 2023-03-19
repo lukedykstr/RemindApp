@@ -13,6 +13,7 @@ html, body {
   overflow-y: hidden;
   */
 }
+
 body::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
@@ -22,15 +23,15 @@ body::-webkit-scrollbar {
   left:20%;
   top:20%;
   width:75%;
-  
 }
+
 #RemindContainer{
   max-height: 600px;
   overflow-y: scroll;
   scrollbar-width: none;
   overflow-x: hidden;
-  
 }
+
 #RemindContainer::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
@@ -52,6 +53,7 @@ padding-bottom: 5px;
   border-bottom: 5px solid;
   border-color:black;
 }
+
 #MainHeader > *{
   padding-bottom: 5px;
 }
@@ -63,7 +65,7 @@ padding-bottom: 5px;
 
 #LeftColumn{
   position: absolute;
-  top:18.8%;
+  top:18.7%;
   left:0px;
   height:100%;
   width: 15%;
@@ -76,7 +78,6 @@ padding-bottom: 5px;
   border-right: 5px solid;
   border-color:black;
   /*background-color:red;*/
-  
 }
 
 .DisplayButtons{
@@ -93,39 +94,38 @@ padding-bottom: 5px;
 
   
 }
+
 .DisplayButtons:Hover{
   background-color:#ff4da9;
 }
-
-
-
-
 
 /*form stuff*/
 /*Todo dim the background, reposition everything give it a color scheme, add taking in a date and time*/
 .form-popup {
   display: none;
-  position:absolute;
+  position: absolute;
   left:0;
   right:0;
   top:30%;
   margin-left:auto;
   margin-right:auto;
 
-  
   width: 40%;
-  height: 40%;
+  height: 25%;
   border: 5px solid black;
   border-radius: 5px;
   z-index: 9;
+
+  padding: 10px;
+  background-color:#ffcce6;
 }
 
 /*look into why the height is like this its weird*/
 .form-container {
-  /*max-width: 300px;*/
+  /*max-width: 300px;
   padding: 10px;
   height:94%;
-  background-color:#ffcce6;
+  background-color:#ffcce6;*/
 }
 
 #BackgroundDim{
@@ -197,3 +197,32 @@ padding-bottom: 5px;
   transform: rotate(135deg);
 }
 
+
+#MONTHLYVIEW{
+  position: relative;
+  left:15%;
+  top:20%;
+  width:80%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  height:80%;
+}
+
+.day{
+  border: solid black 2px;
+  background-color: #d9d9d9;
+}
+
+.DayAmount{
+  position: relative;
+  width: 50%;
+  height: 50%;
+  left: 25%;
+  background-color:#ff80c1;
+  border: solid #ff4da9 4px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

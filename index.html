@@ -14,9 +14,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
 
   <!-- library for JS unit testing -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qunit/2.19.4/qunit.min.js"></script>
+  <!-- email library -->
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
+  <!-- library for downloading files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
 </head>
 
 <body>
@@ -26,16 +28,16 @@
   </div>
   <div id="LeftColumn">
     <button onclick="openForm('reminder')" class="DisplayButtons" id="Create">Create</button>
-    <button onclick="refreshScreen()" class="DisplayButtons">Daily View</button>
+    <button onclick="createDailyView(),changeView(1)" class="DisplayButtons">Daily View</button>
     <button class="DisplayButtons">Weekly View</button>
-    <button class="DisplayButtons">Monthly View</button>
+    <button onclick="changeView(2)" class="DisplayButtons">Monthly View</button>
     <button onclick="openSettings()" class="DisplayButtons">Settings</button>
   </div>
 
   <!-- Will fix dont touch this form for now-->
 
   <div class="form-popup" id="myForm">
-    <form action="/action_page.php" class="form-container">
+    <div class="form-container">
       <h2 id="form-title">Login</h2>
 
       <label id="header-label"><b>Header</b></label>
@@ -50,29 +52,32 @@
       <label><b>Time: </b></label>
       <input type="time" id="TIME" name="time">
       <br><br>
-      <button type="button" class="btn enter" id="enter" onclick="createNode();closeForm();refreshScreen();">Enter</button>
+      <button type="button" class="btn enter" id="enter"
+        onclick="createNode();closeForm();createDailyView();">Enter</button>
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
+    </div>
   </div>
 
-  <div class="form-popup" id="settingsForm" style="height: 30%;">
-    <form action="/action_page.php" class="form-container">
+  <div class="form-popup" id="settingsForm" style="height: 36%;">
+    <div class="form-container">
       <h2 id="form-title">Settings</h2>
 
       <label id="header-label"><b>Email </b></label>
-      <input type="email" placeholder="username@example.com" name="header" id="email" required>
+      <input type="email" placeholder="username@example.com" name="header" id="email">
       <br>
       <br>
       <label id="body-label"><b>Phone </b></label>
-      <input type="tel" placeholder="(123) 123-1234" name="body" id="phone" required>
+      <input type="tel" placeholder="(123) 123-1234" name="body" id="phone"><br><br>
+      <button id="download" onclick="downloadData()">Download data</button><br><br>
+      <label><b>Upload data: </b></label><input id="upload" type="file" accept=".data" onchange="uploadData()">
       <br>
       <br>
       <button type="button" class="btn enter" id="enter" onclick="settingsEnter()">Enter</button>
       <button type="button" class="btn cancel" onclick="closeSettings()">Close</button>
-    </form>
+    </div>
   </div>
   <div id="BackgroundDim"></div>
-
+  
   <div id="Canvas">
     <div id="CanvasHeader">
       <button class="DateChangeButton" onclick="changeDate(-7)">
@@ -94,12 +99,13 @@
     <input type="date" id="DisDate" name="date" onchange="calSubmit()">
     <hr>
     <hr>
-    <div id="RemindContainer">
-
-
-    </div>
+    <div id="RemindContainer"></div>
   </div>
+  <div id="MONTHLYVIEW">
 
+  </div>
+  
+  <script src="email.js"></script>
   <script src="script.js"></script>
 </body>
 
