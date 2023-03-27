@@ -8,33 +8,68 @@ html, body {
   background-color:#ffcce6;
   height: 100%;
   width: 100%;
+  overflow: hidden;
   /*
   overflow-x: hidden;
   overflow-y: hidden;
   */
 }
 
+
 body::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
 
 #Canvas{
+  position: absolute;
+  left: max(22.5%, 200px);
+  top: max(10%, 75px);
+  width: 60%;
+  min-width: calc(60%,150px);
+  padding:0;
+  margin: 0;
+}
+
+#MonthlyCanvas{
+  position: absolute;
+  left: max(10%, 200px);
+  top: max(10%, 75px);
+  width: 40%;
+  height: 60%;
+  min-width: calc(40%,150px);
+  padding:0;
+  margin: 0;
+}
+
+#MonthlyView{
+  position: absolute;
+  left: max(50%, 150px);
+  top: max(10%, 75px);
+  width: 40%;
+  min-width: calc(40%,150px);
+  padding:0;
+  margin: 0;
+}
+#MonthlyRemindContainer{
+  position: absolute;
+  top: max(12.5%, 75px);
+  margin-left:max(55%, 150px);
+  max-width: 40%;
+}
+
+#CanvasHeader{
   position: relative;
-  left:20%;
-  top:20%;
-  width:75%;
+  border-bottom: 5px solid black;
 }
 
-#RemindContainer{
-  max-height: 600px;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  overflow-x: hidden;
+#DisDate{
+
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
 }
 
-#RemindContainer::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
-}
+
 
 h1{
   padding:15px;
@@ -42,30 +77,36 @@ h1{
 }
 
 #MainHeader{
+  display: flex;
+  flex-direction: row;
   width:100%;
-  height: 20%;
+  height: 10%;
+  min-height: 75px;
   position: absolute;
   top:0px;
   left:0px;
   /*border-radius:10px;*/
   background-color:#99ccff;
-padding-bottom: 5px;
+  padding-left: 30px;
+  padding-bottom: 5px;
   border-bottom: 5px solid;
   border-color:black;
 }
 
-#MainHeader > *{
-  padding-bottom: 5px;
+#MainHeader h1{
+  margin: 0px;
+  padding: 0px;
+}
+#MainHeader p{
+  margin: 2%;
+  
 }
 
-#MainHeader>p{
-  margin-left: 40px;
-  margin-top: -40px;
-}
+
 
 #LeftColumn{
   position: absolute;
-  top:18.7%;
+  top: max(10%, 75px);
   left:0px;
   height:100%;
   width: 15%;
@@ -80,19 +121,27 @@ padding-bottom: 5px;
   /*background-color:red;*/
 }
 
+.DateChangeButton{
+  height: 50px;
+  width: 50px;
+  font-size:20px;
+  border-width:5px;
+  border-radius:5px;
+  background-color:#ff80c1; 
+  
+}
+.DateChangeButton:Hover{
+  background-color:#ff4da9;
+}
 .DisplayButtons{
   padding:10px 15px 10px 15px;
   margin-bottom: 20px;
   width:100%;
   
   font-size:20px;
-  border-size:2px;
+  border-width:5px;
   border-radius:5px;
-  background-color:#ff80c1;
-  text-decoration: underline;
-
-
-  
+  background-color:#ff80c1; 
 }
 
 .DisplayButtons:Hover{
@@ -111,7 +160,7 @@ padding-bottom: 5px;
   margin-right:auto;
 
   width: 40%;
-  height: 25%;
+  height: auto;
   border: 5px solid black;
   border-radius: 5px;
   z-index: 9;
@@ -140,33 +189,53 @@ padding-bottom: 5px;
   
 }
 
+#RemindContainer{
+  max-height: 450px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  overflow-x: hidden;
+  margin-top: 20px;
+  width: 100%;
+}
 
+
+#RemindContainer::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
 /*Remind Bubble Formatting*/
 .RemindBubble{
+  position: relative;
   box-sizing: border-box;
-  margin-left: 10px;
+  margin-left: 0px;
   margin-bottom: 10px;
-  width: 95%;
-  height: 300px;
+  height: auto;
   border: 5px solid black;
   border-radius: 10px;
   background-color:#ff80c1;
-  padding-left: 15px;
-  padding-bottom: 15px;
+  padding: 5px 50px 5px 20px;
+}
+
+.RemindBubble H1,br{
+  margin: 0px;
+  padding: 0px;
+  word-wrap: break-word;
+}
+.RemindBubble p{
+  margin: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 25px;
+  
 }
 
 .RemindH{
   margin-top: 10px;
   text-decoration: underline;
-  
 }
+
 .RemindP{
   margin: 500 px;
 }
-
-
-
-
 
 /*Arrow formatting*/
 
@@ -198,20 +267,30 @@ padding-bottom: 5px;
 }
 
 
+#MonthlyRemindContainer{
+  position: absolute;
+  left:0%;
+  width:50%;
+  
+}
+
 #MONTHLYVIEW{
   position: relative;
-  left:15%;
-  top:20%;
-  width:80%;
-  display: grid;
+  left:0%;
+  top:0%;
+  width:100%;
+  height: 100%;
+  display: none;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  height:80%;
+
+
 }
 
 .day{
   border: solid black 2px;
   background-color: #d9d9d9;
+  
 }
 
 .DayAmount{
@@ -225,4 +304,72 @@ padding-bottom: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+/* Style for the dropdown container */
+.dropdown {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-block;
+}
+
+/* Style for the dropdown button */
+.dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+/* Style for the dots */
+.dot {
+  width: 5px;
+  height: 5px;
+  margin: 2px;
+  border-radius: 50%;
+  background-color: #333;
+}
+
+/* Style for the dropdown content */
+.dropdown-content {
+  position: absolute;
+  z-index: 1;
+  top: 30px;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 100px;
+  padding: 8px 0;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+/* Show the dropdown content when the dropdown button is clicked */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown-content:hover {
+  display: block;
+}
+
+/* Style for the buttons inside the dropdown content */
+.dropdown-content button {
+  display: block;
+  width: 200%;
+  padding: none;
+  text-align: left;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Style for the buttons on hover */
+.dropdown-content button:hover {
+  background-color: #ddd;
 }

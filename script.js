@@ -6,8 +6,7 @@ let DisplayDate = TodaysDate;
 
 // list to hold user settings
 let settings = {
-  email: "",
-  phone: ""
+  email: ""
 };
 
 // list to hold reminders
@@ -18,46 +17,20 @@ let headerInput = document.getElementById("HEADER");
 let bodyInput = document.getElementById("bodyText");
 let dateInput = document.getElementById("DATE");
 let timeInput = document.getElementById("TIME");
-
 let emailInput = document.getElementById("email");
-let phoneInput = document.getElementById("phone");
 
-//trying to figure out how to create html objects using javascript
+// no longer creates HTML elements. just adds reminder to list
+// then calls createDailyView() to refresh screen
 function createNode() {
-  var breakLine = document.createElement("br");
-  var doc = document.createElement("div");
-  var text = document.createElement("h1");
-  var bodyText = document.createElement("p");
-  var dateFormat = document.createElement("time");
   var date = new Date(document.getElementById("DATE").value);
-  var timeFormat = document.createElement("time");
-  doc.setAttribute("class", "RemindBubble");
-
-
-  text.classList.add("RemindH");
-  text.innerHTML = document.getElementById("HEADER").value;
-  doc.appendChild(text);
-
-  bodyText.classList.add("RemindP");
-  bodyText.innerHTML = document.getElementById("bodyText").value;
-  doc.appendChild(bodyText);
-
-
   // date value from date input is in YYYY-MM-DD form and is one day behind
   // for some reason, idk why
   // this changes it to MM/DD/YYYY and increments it by 1
   date.setDate(date.getDate() + 1);
-  dateFormat.innerHTML = date.toLocaleDateString("en-US");
-  doc.appendChild(dateFormat);
-
-  doc.appendChild(breakLine);
-  timeFormat.innerHTML = document.getElementById("TIME").value;
-  doc.appendChild(timeFormat);
-  document.getElementById("Canvas").append(doc);
-
   // add reminder to list
-  createReminder(text.innerHTML, bodyText.innerHTML, dateFormat.innerHTML, convertTime(timeFormat.innerHTML));
+  createReminder(headerInput.value, bodyInput.value, date.toLocaleDateString("en-US"), convertTime(timeInput.value));
   save();
+  createDailyView();
   //window.setTimeout(CloneNode, 0);
 }
 
@@ -66,37 +39,63 @@ function convertTime(time) {
   var date = new Date();
   var hours;
   var ampm;
-  
+
   time = time.split(":");
   date.setHours(time[0], time[1]);
 
-  if(date.getHours() >= 12) {
+  if (date.getHours() >= 12) {
     ampm = " PM";
   } else {
     ampm = " AM";
   }
-  
+
   hours = date.getHours() % 12;
 
-  if(hours === 0) {hours = 12;}
+  if (hours === 0) { hours = 12; }
+
+  if(parseInt(time[1], 10) < 10 && time[1].length == 1) {
+    time[1] = "0" + time[1];
+  }
 
   return hours + ":" + time[1] + ampm;
+}
+
+// create date object from date string and 12hr time string
+function createDate(dateString, timeString) {
+  var time = timeString.split(/[\s\:]+/);
+  console.log(time);
+  var date = new Date(dateString);
+  var hour = parseInt(time[0], 10);
+  var minute = parseInt(time[1], 10);
+
+  if (time[2] === "PM") {
+    if (hour < 12) {
+      hour += 12;
+    } else {
+      hour += 1;
+    }
+  } else if (hour === 12) {
+    hour = 0;
+  }
+
+  date.setHours(hour, minute, 0, 0);
+  return date;
 }
 
 function formEnter() {
   if (headerInput.value === "") {
     alert("Header cannot be blank.");
-    return 0;
+    return -1;
   }
 
   if (dateInput.value === "") {
     alert("Date cannot be blank.");
-    return 0;
+    return -1;
   }
 
   if (timeInput.value === "") {
     alert("Time cannot be blank.");
-    return 0;
+    return -1;
   }
 
   var inputDate = incrementDate(dateInput.valueAsDate, 1);
@@ -104,18 +103,27 @@ function formEnter() {
 
   if (inputDate < TodaysDate) {
     alert("Date cannot be in the past.");
-    return 0;
+    return -1;
+  }
+
+  for (var i = 0; i < reminders.length; i++) {
+    var temp = reminders[i];
+
+    if (headerInput.value == temp.header && dateString(inputDate) == temp.date && convertTime(timeInput.value) == temp.time) {
+      alert("Cannot make a reminder with same header, date, and time as another.");
+      return -1;
+    }
   }
 
   createNode();
   closeForm();
   createDailyView();
+  return 0;
 }
 
 function dateString(date) {
   return date.toLocaleString("en-US").split(",")[0];
 }
-
 
 function createDailyView() {
   var date = dateString(DisplayDate);
@@ -126,7 +134,7 @@ function createDailyView() {
   });
 
   DisplayDate.setHours(0, 0, 0, 0);
-  
+
   document.getElementById("DailyView").innerHTML = "Daily View: " + date;
   document.getElementById("DisDate").valueAsDate = DisplayDate;
   loadReminders(date);
@@ -154,6 +162,7 @@ function openForm(mode) {
   if (mode === "reminder") {
     document.getElementById("enter").setAttribute("onclick", "formEnter()");
     document.getElementById("form-title").innerHTML = "New Reminder";
+
   } else if (mode === "edit") {
     document.getElementById("form-title").innerHTML = "Edit Reminder";
   }
@@ -169,7 +178,6 @@ function closeForm() {
 
 function openSettings() {
   emailInput.value = settings.email;
-  phoneInput.value = settings.phone;
 
   document.getElementById("settingsForm").style.display = "block";
   document.getElementById("BackgroundDim").style.display = "block";
@@ -182,17 +190,32 @@ function closeSettings() {
 
 function settingsEnter() {
   settings.email = emailInput.value;
-  settings.phone = phoneInput.value;
 
   save();
   closeSettings();
 }
 
-//closeForm();
-
 function createReminder(header, body, date, time) {
-  const reminder = { body, date, header, time };
-  reminders.push(reminder);
+  const reminder = { body, date, header, time, notified: false };
+
+  var thisDate = createDate(date, time);
+  var match = false;
+
+  // sort reminder into list based on date / time
+  // this will make them show in order
+  for (var i = 0; i < reminders.length; i++) {
+    var otherDate = createDate(reminders[i].date, reminders[i].time);
+    if (thisDate <= otherDate) {
+      reminders.splice(i, 0, reminder);
+      match = true;
+      break;
+    }
+  }
+
+  if (!match) {
+    reminders.push(reminder);
+  }
+
   return reminder;
 }
 
@@ -221,9 +244,23 @@ function loadNode(index) {
   var deleteButton = document.createElement("button");
   doc.classList.add("RemindBubble");
   //doc.setAttribute('id', 'remindBubbles');
+  var dropdown = document.createElement("div");
+  dropdown.classList.add("dropdown");
+  var dropdownButton = document.createElement("div");
+  dropdownButton.classList.add("dropdown-button");
+
+  var dot = document.createElement("div");
+  dot.classList.add("dot");
+  var dot2 = document.createElement("div");
+  dot2.classList.add("dot");
+  var dot3 = document.createElement("div");
+  dot3.classList.add("dot");
+  var dropdownContent = document.createElement("div");
+  dropdownContent.classList.add("dropdown-content");
 
 
-  text.classList.add("RemindH");
+
+  //text.classList.add("RemindH");
   text.innerHTML = data.header;
   doc.appendChild(text);
 
@@ -249,10 +286,20 @@ function loadNode(index) {
   deleteButton.innerHTML = "Delete";
   deleteButton.setAttribute("onclick", "deleteReminder(" + index + ")");
 
+
   buttonDiv.appendChild(editButton);
   buttonDiv.appendChild(deleteButton);
 
-  doc.appendChild(buttonDiv);
+
+  dropdownButton.appendChild(dot);
+  dropdownButton.appendChild(dot2);
+  dropdownButton.appendChild(dot3);
+  dropdown.appendChild(dropdownButton);
+  dropdownContent.appendChild(buttonDiv);
+  dropdown.appendChild(dropdownContent);
+  doc.appendChild(dropdown);
+
+
 
   document.getElementById("RemindContainer").appendChild(doc);
 }
@@ -264,8 +311,14 @@ function editReminder(index) {
   dateInput.valueAsDate = new Date(reminders[index].date);
   timeInput.value = reminders[index].time;
 
-  document.getElementById("enter").setAttribute("onclick", "deleteReminder(" + index + "); formEnter();");
+  document.getElementById("enter").setAttribute("onclick", "deleteOnEnter(" + index + ")");
   openForm("edit");
+}
+
+// use in place of formEnter() when editing reminders
+// deletes old reminder if new data is OK
+function deleteOnEnter(index) {
+  if (formEnter() != -1) { deleteReminder(index); }
 }
 
 // pops item from reminders list, saves, refreshes
@@ -308,18 +361,19 @@ function downloadData() {
 function uploadData() {
   var fileInput = document.getElementById("upload");
 
-  if(fileInput.files.length > 0) {
+  if (fileInput.files.length > 0) {
     var reader = new FileReader();
 
     reader.addEventListener("load", (e) => {
       jsonData = JSON.parse(reader.result);
-      
+
       reminders = jsonData[0];
-      settings  = jsonData[1];
+      settings = jsonData[1];
 
       save();
+      location.reload();
     });
-    
+
     reader.readAsText(fileInput.files[0]);
   }
 }
@@ -329,81 +383,18 @@ function changeView(which) {
   if (which == 1) {
     document.getElementById("Canvas").style.display = "block";
     document.getElementById("MONTHLYVIEW").style.display = "none";
+    document.getElementById("MonthlyCanvas").style.display = "none";
     createDailyView();
   } else {
     document.getElementById("Canvas").style.display = "none";
+    document.getElementById("MonthlyCanvas").style.display = "block";
     document.getElementById("MONTHLYVIEW").style.display = "grid";
     document.getElementById("MONTHLYVIEW").innerHTML = "";
     createMonthlyView();
   }
 }
 ///////////////////MONTHLY VIEW//////////////////
-const calendar = document.querySelector("#MONTHLYVIEW");
 
-function createMonthlyView() {
-  var daysOfWeek = ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'];
-  for (let numWeekDays = 0; numWeekDays < 7; numWeekDays++) {
-    calendar.insertAdjacentHTML("beforeend",
-      `<div class="day">
-      ${daysOfWeek[numWeekDays]}
-    </div>`);
-  }
-  for (let Empty = 0; Empty < getFirstDayOfMonth(); Empty++) {
-    calendar.insertAdjacentHTML("beforeend",
-      `<div class="day"></div>`);
-  }
-
-  for (let day = 1; day <= getDaysInMonth(); day++) {
-
-    //later for the number of reminders per thing
-    const tempDate = DayOfMonth(day);
-    var count = 0;
-    for (i = 0; i < reminders.length; i += 1) {
-      if (tempDate === "all" || reminders[i].date === tempDate) {
-        count++;
-      }
-
-    }
-    // some kind of on hover loadreminders into remindcontainer off hover set remind container to none
-    calendar.insertAdjacentHTML("beforeend",
-      `<div class="day">
-      ${day}
-      <div onmouseover="loadReminders(${tempDate}),setDisplayToOn()" onmouseout="setDisplayToOff()" class="DayAmount">${count}</div>
-      <div id="RemindContainer"></div>
-    </div>`);
-  }
-}
-
-function log() {
-  console.log("hello")
-
-}
-
-function setDisplayToOn() {
-  document.getElementById("RemindContainer").style.display = "block";
-}
-
-function setDisplayToOff() {
-  document.getElementById("RemindContainer").style.display = "none";
-}
-
-function getDaysInMonth() {
-  const date = new Date(DisplayDate.getTime());
-  date.setDate(0);
-  return date.getDate();
-}
-
-function getFirstDayOfMonth() {
-  const date = new Date(DisplayDate.getTime());
-  date.setDate(1);
-  return date.getDay();
-}
-
-function DayOfMonth(current) {
-  const date = new Date(DisplayDate.getTime());
-  date.setDate(current);
-  return date.toLocaleString("en-US").split(",")[0];
-}
 ////////////////////////////////////////////////
 
 window.onload = function init() {
@@ -411,7 +402,7 @@ window.onload = function init() {
 
   document.getElementById("DailyView").innerHTML = "Daily View: " + date;
   document.getElementById("TodaysDate").innerHTML = date;
-
+  changeView(1);
   load();
   createDailyView();
 };
