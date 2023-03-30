@@ -19,6 +19,9 @@ let dateInput = document.getElementById("DATE");
 let timeInput = document.getElementById("TIME");
 let emailInput = document.getElementById("email");
 
+let repeatInput = "never";
+let repeatAmount = 0;
+
 // no longer creates HTML elements. just adds reminder to list
 // then calls createDailyView() to refresh screen
 function createNode() {
@@ -28,10 +31,24 @@ function createNode() {
   // this changes it to MM/DD/YYYY and increments it by 1
   date.setDate(date.getDate() + 1);
   // add reminder to list
-  createReminder(headerInput.value, bodyInput.value, date.toLocaleDateString("en-US"), convertTime(timeInput.value));
+  createReminder(headerInput.value, bodyInput.value, dateString(date), convertTime(timeInput.value));
+
+  if(repeatInput !== "never") {
+    for(var i=0;i<repeatAmount;i++) {
+      if(repeatInput == "daily") {
+        date.setDate(date.getDate() + 1);
+      } else {
+        date.setDate(date.getDate() + 7);
+      }
+
+      if(!reminderExists(headerInput.value, dateString(date), convertTime(timeInput.value))) {
+        createReminder(headerInput.value, bodyInput.value, dateString(date), convertTime(timeInput.value));
+      }
+    }
+  }
+  
   save();
   createDailyView();
-  //window.setTimeout(CloneNode, 0);
 }
 
 // converts 24hr time to 12hr time
@@ -82,6 +99,7 @@ function createDate(dateString, timeString) {
   return date;
 }
 
+// runs when enter is clicked in Create Reminder form
 function formEnter() {
   if (headerInput.value === "") {
     alert("Header cannot be blank.");
@@ -106,13 +124,9 @@ function formEnter() {
     return -1;
   }
 
-  for (var i = 0; i < reminders.length; i++) {
-    var temp = reminders[i];
-
-    if (headerInput.value == temp.header && dateString(inputDate) == temp.date && convertTime(timeInput.value) == temp.time) {
-      alert("Cannot make a reminder with same header, date, and time as another.");
+  if(reminderExists(headerInput.value, dateString(inputDate), convertTime(timeInput.value))) {
+    alert("Cannot make a reminder with same header, date, and time as another.");
       return -1;
-    }
   }
 
   createNode();
@@ -121,10 +135,47 @@ function formEnter() {
   return 0;
 }
 
+// check if reminder exists given a header, date, and time
+function reminderExists(header, date, time) {
+  for (var i = 0; i < reminders.length; i++) {
+    var temp = reminders[i];
+
+    if (header == temp.header && date == temp.date && time == temp.time) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// what the repeat never/daily/weekly/monthly radio buttons do on change
+function setRepeat(value) {
+  var type = document.getElementById("repeat-type");
+  
+  repeatInput = value;
+  repeatAmount = document.getElementById("repeat-amount").value;
+  
+  if(document.getElementById(value).checked) {
+    document.getElementById("repeat-label").style.visibility = "visible";
+    
+    if(value === "daily") {
+      type.innerHTML = "day(s)";
+    } else if(value === "weekly") {
+      type.innerHTML = "week(s)";
+    } else if(value === "monthly") {
+      type.innerHTML = "month(s)";
+    } else {
+      document.getElementById("repeat-label").style.visibility = "hidden";
+    }
+  }
+}
+
+// returns MM/DD/YYYY string given date object
 function dateString(date) {
   return date.toLocaleString("en-US").split(",")[0];
 }
 
+// creates daily view based on DisplayDate
 function createDailyView() {
   var date = dateString(DisplayDate);
   var get = Array.from(document.getElementsByClassName("RemindBubble"));
@@ -140,17 +191,20 @@ function createDailyView() {
   loadReminders(date);
 }
 
+// increment date object by days
 function incrementDate(dateInput, increment) {
   return new Date(dateInput.getTime() + (86400000 * increment));
 }
 //module.exports = incrementDate;
 
+// changes the display date and updates daily view
 function changeDate(amount) {
   DisplayDate =
     incrementDate(DisplayDate, amount);
   createDailyView();
 }
 
+// sets display date to calendar input value and updates daily view
 function calSubmit() {
   DisplayDate = new Date(document.getElementById("DisDate").value + "T00:00:00");
   createDailyView();
@@ -171,11 +225,13 @@ function openForm(mode) {
   document.getElementById("BackgroundDim").style.display = "block";
 }
 
+// closes Create Reminder form
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
   document.getElementById("BackgroundDim").style.display = "none";
 }
 
+// opens settings form
 function openSettings() {
   emailInput.value = settings.email;
 
@@ -183,11 +239,13 @@ function openSettings() {
   document.getElementById("BackgroundDim").style.display = "block";
 }
 
+// closes settings form
 function closeSettings() {
   document.getElementById("settingsForm").style.display = "none";
   document.getElementById("BackgroundDim").style.display = "none";
 }
 
+// runs when enter is clicked in settings
 function settingsEnter() {
   settings.email = emailInput.value;
 
@@ -195,6 +253,7 @@ function settingsEnter() {
   closeSettings();
 }
 
+// adds reminder to list
 function createReminder(header, body, date, time) {
   const reminder = { body, date, header, time, notified: false };
 
@@ -258,9 +317,6 @@ function loadNode(index) {
   var dropdownContent = document.createElement("div");
   dropdownContent.classList.add("dropdown-content");
 
-
-
-  //text.classList.add("RemindH");
   text.innerHTML = data.header;
   doc.appendChild(text);
 
@@ -299,8 +355,6 @@ function loadNode(index) {
   dropdown.appendChild(dropdownContent);
   doc.appendChild(dropdown);
 
-
-
   document.getElementById("RemindContainer").appendChild(doc);
 }
 
@@ -321,7 +375,7 @@ function deleteOnEnter(index) {
   if (formEnter() != -1) { deleteReminder(index); }
 }
 
-// pops item from reminders list, saves, refreshes
+// deletes item from reminders list, saves, refreshes daily view
 function deleteReminder(index) {
   reminders.splice(index, 1);
   save();
@@ -354,10 +408,12 @@ function load() {
   }
 }
 
+// downloads user data to user's device
 function downloadData() {
   download(JSON.stringify([reminders, settings]), "reminders.data", "text/plain");
 }
 
+// uploads user data from file input in settings
 function uploadData() {
   var fileInput = document.getElementById("upload");
 

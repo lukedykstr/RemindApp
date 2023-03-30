@@ -37,13 +37,12 @@
   <!-- Will fix dont touch this form for now-->
 
   <div class="form-popup" id="myForm">
-    <div class="form-container">
-      <h2 id="form-title">Login</h2>
-
-      <label id="header-label"><b>Header</b></label>
+    <div class="form-container" style="float: left;">
+      <h2 id="form-title">New Reminder</h2>
+      <label id="header-label"><b>Header: </b></label>
       <input type="text" placeholder="Enter Header" name="header" id="HEADER" required>
       <br>
-      <label id="body-label"><b>Body </b></label>
+      <label id="body-label"><b>Body: </b></label>
       <input type="text" placeholder="Enter Body" name="body" id="bodyText" required>
       <br>
       <label><b>Date: </b></label>
@@ -54,6 +53,17 @@
       <br><br>
       <button type="button" class="btn enter" id="enter" onclick="formEnter()">Enter</button>
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </div>
+    <div class="form-container" id="repeat-container" style="float: left; margin-left:20px;">
+      <h2 id="form-title" style="margin-top: 80px;"> </h2>
+      <label><b>Repeat:</b></label><br>
+      <input type="radio" id="never" name="repeat" value="never" checked onchange="setRepeat('never')">
+      <label for="never">Never</label>
+      <input type="radio" id="daily" name="repeat" value="daily" onchange="setRepeat('daily')">
+      <label for="daily">Daily</label>
+      <input type="radio" id="weekly" name="repeat" value="weekly" onchange="setRepeat('weekly')">
+      <label for="weekly">Weekly</label><br>
+      <label id="repeat-label" style="visibility: hidden;">For <input id="repeat-amount" type="number" min=1 step=1 value=1 style="width: 60px;"> <span id="repeat-type">day(s)</span></label>
     </div>
   </div>
 

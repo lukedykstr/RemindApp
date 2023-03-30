@@ -20,7 +20,7 @@ body::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }
 
-#Canvas{
+#Canvas {
   position: absolute;
   left: max(22.5%, 200px);
   top: max(10%, 75px);
@@ -30,7 +30,7 @@ body::-webkit-scrollbar {
   margin: 0;
 }
 
-#MonthlyCanvas{
+#MonthlyCanvas {
   position: absolute;
   left: max(10%, 200px);
   top: max(10%, 75px);
@@ -41,7 +41,7 @@ body::-webkit-scrollbar {
   margin: 0;
 }
 
-#MonthlyView{
+#MonthlyView {
   position: absolute;
   left: max(50%, 150px);
   top: max(10%, 75px);
@@ -50,33 +50,31 @@ body::-webkit-scrollbar {
   padding:0;
   margin: 0;
 }
-#MonthlyRemindContainer{
+
+#MonthlyRemindContainer {
   position: absolute;
   top: max(12.5%, 75px);
   margin-left:max(55%, 150px);
   max-width: 40%;
 }
 
-#CanvasHeader{
+#CanvasHeader {
   position: relative;
   border-bottom: 5px solid black;
 }
 
-#DisDate{
-
+#DisDate {
   position: absolute;
   bottom: 2px;
   left: 2px;
 }
 
-
-
-h1{
+h1 {
   padding:15px;
   font-size:50px;
 }
 
-#MainHeader{
+#MainHeader {
   display: flex;
   flex-direction: row;
   width:100%;
@@ -93,25 +91,24 @@ h1{
   border-color:black;
 }
 
-#MainHeader h1{
+#MainHeader h1 {
   margin: 0px;
   padding: 0px;
 }
-#MainHeader p{
+
+#MainHeader p {
   margin: 2%;
   
 }
 
-
-
-#LeftColumn{
+#LeftColumn {
   position: absolute;
   top: max(10%, 75px);
   left:0px;
   height:100%;
   width: 15%;
   max-width: 150px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 10px;
   padding-right: 5px;
   padding-top: 10px;
@@ -121,7 +118,7 @@ h1{
   /*background-color:red;*/
 }
 
-.DateChangeButton{
+.DateChangeButton {
   height: 50px;
   width: 50px;
   font-size:20px;
@@ -130,10 +127,12 @@ h1{
   background-color:#ff80c1; 
   
 }
-.DateChangeButton:Hover{
+
+.DateChangeButton:Hover {
   background-color:#ff4da9;
 }
-.DisplayButtons{
+
+.DisplayButtons {
   padding:10px 15px 10px 15px;
   margin-bottom: 20px;
   width:100%;
@@ -144,7 +143,7 @@ h1{
   background-color:#ff80c1; 
 }
 
-.DisplayButtons:Hover{
+.DisplayButtons:Hover {
   background-color:#ff4da9;
 }
 
@@ -169,15 +168,11 @@ h1{
   background-color:#ffcce6;
 }
 
-/*look into why the height is like this its weird*/
-.form-container {
-  /*max-width: 300px;
-  padding: 10px;
-  height:94%;
-  background-color:#ffcce6;*/
+.form-container label, input {
+  margin-top: 10px;
 }
 
-#BackgroundDim{
+#BackgroundDim {
   display:none;
   position: fixed;
   left:0px;
@@ -189,7 +184,7 @@ h1{
   
 }
 
-#RemindContainer{
+#RemindContainer {
   max-height: 450px;
   overflow-y: scroll;
   scrollbar-width: none;
@@ -203,7 +198,7 @@ h1{
     display: none;  /* Safari and Chrome */
 }
 /*Remind Bubble Formatting*/
-.RemindBubble{
+.RemindBubble {
   position: relative;
   box-sizing: border-box;
   margin-left: 0px;
@@ -215,12 +210,12 @@ h1{
   padding: 5px 50px 5px 20px;
 }
 
-.RemindBubble H1,br{
+.RemindBubble H1,br {
   margin: 0px;
   padding: 0px;
   word-wrap: break-word;
 }
-.RemindBubble p{
+.RemindBubble p {
   margin: 0px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -228,25 +223,25 @@ h1{
   
 }
 
-.RemindH{
+.RemindH {
   margin-top: 10px;
   text-decoration: underline;
 }
 
-.RemindP{
+.RemindP {
   margin: 500 px;
 }
 
 /*Arrow formatting*/
 
-#CanvasHeader{
+#CanvasHeader {
   display:flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-#DailyView{
+#DailyView {
   text-align:center;
   
 }
@@ -267,14 +262,14 @@ h1{
 }
 
 
-#MonthlyRemindContainer{
+#MonthlyRemindContainer {
   position: absolute;
   left:0%;
   width:50%;
   
 }
 
-#MONTHLYVIEW{
+#MONTHLYVIEW {
   position: relative;
   left:0%;
   top:0%;
@@ -287,13 +282,13 @@ h1{
 
 }
 
-.day{
+.day {
   border: solid black 2px;
   background-color: #d9d9d9;
   
 }
 
-.DayAmount{
+.DayAmount {
   position: relative;
   width: 50%;
   height: 50%;
