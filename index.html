@@ -28,9 +28,9 @@
   </div>
   <div id="LeftColumn">
     <button onclick="openForm('reminder')" class="DisplayButtons" id="Create">Create</button>
-    <button onclick="changeView(1)" class="DisplayButtons">Daily View</button>
-    <button class="DisplayButtons">Weekly View</button>
-    <button onclick="changeView(2)" class="DisplayButtons">Monthly View</button>
+    <button onclick="changeView(1),createView()" class="DisplayButtons">Daily View</button>
+    <button onclick="changeView(2),createView()" class="DisplayButtons">Weekly View</button>
+    <button onclick="changeView(3),createView()" class="DisplayButtons">Monthly View</button>
     <button onclick="openSettings()" class="DisplayButtons">Settings</button>
   </div>
 
@@ -63,7 +63,8 @@
       <label for="daily">Daily</label>
       <input type="radio" id="weekly" name="repeat" value="weekly" onchange="setRepeat('weekly')">
       <label for="weekly">Weekly</label><br>
-      <label id="repeat-label" style="visibility: hidden;">For <input id="repeat-amount" type="number" min=1 step=1 value=1 style="width: 60px;"> <span id="repeat-type">day(s)</span></label>
+      <label id="repeat-label" style="visibility: hidden;">For <input id="repeat-amount" type="number" min=1 step=1
+          value=1 style="width: 60px;"> <span id="repeat-type">day(s)</span></label>
     </div>
   </div>
 
@@ -76,14 +77,23 @@
       <br>
       <br>
       <button id="download" onclick="downloadData()">Download data</button><br><br>
-      <label><b>Upload data: </b></label><input id="upload" type="file" accept=".data" onchange="uploadData()">
+      <label><b>Upload data: </b></label><input id="upload" type="file" accept=".data" onchange="uploadData()"><br><br>
+      <label><b>Email notifications:</b></label><br>
+      <input type="radio" id="notif-dont" name="email-notif" value="dont">
+      <label for="dont-email">Don't send</label>
+      <input type="radio" id="notif-ontime" name="email-notif" value="ontime" checked>
+      <label for="notif-ontime">On time</label>
+      <input type="radio" id="notif-10min" name="email-notif" value="10min">
+      <label for="notif-10min">10 minutes before</label>
+      <input type="radio" id="notif-30min" name="email-notif" value="30min">
+      <label for="notif-30min">30 minutes before</label>
       <br>
       <br>
       <button type="button" class="btn enter" id="enter" onclick="settingsEnter()">Enter</button>
       <button type="button" class="btn cancel" onclick="closeSettings()">Close</button>
     </div>
   </div>
-  <div id="BackgroundDim"></div>
+  <div id="BackgroundDim" onclick="closeForm(), closeSettings()"></div>
 
   <div id="Canvas">
     <div id="CanvasHeader">
@@ -108,25 +118,42 @@
     <div id="RemindContainer"></div>
   </div>
 
-  <div id="MonthlyCanvas">
+  <div id="WeeklyCanvas">
     <div id="CanvasHeader">
-      <button class="DateChangeButton" onclick="changeDate(-1)">
+      <button class="DateChangeButton" onclick="changeDate(-7),changeView(2)">
         <i class="arrow left"></i>
       </button>
-      <h1 id="DailyView">Monthly View </h1>
-      <button class="DateChangeButton" onclick="changeDate(1)">
+      <h1 id="WeeklyText">Weekly View </h1>
+      <button class="DateChangeButton" onclick="changeDate(7),changeView(2)">
         <i class="arrow right"></i>
       </button>
       <br>
-      <input type="date" id="DisDate" name="date" onchange="calSubmit()">
+      <input type="date" id="DisDateW" name="date" onchange="calSubmit()">
+    </div>
+    <div id="WEEKLYVIEW"></div>
+
+  </div>
+  <div id="WeeklyRemindContainer"></div>
+
+  <div id="MonthlyCanvas">
+    <div id="CanvasHeader">
+      <button class="DateChangeButton" onclick="changeMonth(-1),createView(),changeView(3)">
+        <i class="arrow left"></i>
+      </button>
+      <h1 id="MonthlyText">Monthly View </h1>
+      <button class="DateChangeButton" onclick="changeMonth(1),createView(),changeView(3)">
+        <i class="arrow right"></i>
+      </button>
+      <br>
+      <input type="date" id="DisDateM" name="date" onchange="calSubmit()">
     </div>
     <div id="MONTHLYVIEW"></div>
 
   </div>
   <div id="MonthlyRemindContainer"></div>
-  <script src="email.js"></script>
   <script src="script.js"></script>
-  <script src="monthlyview.js"></script>
+  <script src="email.js"></script>
+  <script src="Views.js"></script>
 </body>
 
 </html>
