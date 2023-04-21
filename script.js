@@ -324,8 +324,16 @@ function save() {
 // load data from localStorage
 function load() {
   if (localStorage.getItem("settings") !== null) {
-    reminders = JSON.parse(localStorage.getItem("reminders"));
-    settings = JSON.parse(localStorage.getItem("settings"));
+    const remindersString = localStorage.getItem("reminders");
+    if (remindersString !== null && remindersString !== undefined) {
+      reminders = JSON.parse(remindersString);
+    }
+    const settingsJSON = localStorage.getItem("settings");
+    if (settingsJSON !== null && settingsJSON !== undefined) {
+      const parsedSettings = JSON.parse(settingsJSON);
+      settings.email = parsedSettings.email !== null ? parsedSettings.email : settings.email;
+      settings.notifs = parsedSettings.notifs !== null ? parsedSettings.notifs : settings.notifs;
+    }
   }
 }
 

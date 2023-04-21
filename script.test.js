@@ -61,7 +61,7 @@ module.exports = functionname;
 
 //TO RUN THE TESTS GO TO THE SHELL PROMPT AND TYPE IN 'npm test'
 
-const { reminders,createNode,convertTime,createDate,formEnter,reminderExists,setRepeat,dateString,incrementDate,changeDate,calSubmit,openForm,closeForm,openSettings,closeSettings,settingsEnter,createReminder,editReminder,deleteOnEnter,deleteReminder,save,load,downloadData,uploadData,} = require('./scripttester.js');
+const { reminders,createNode,convertTime,createDate,formEnter,reminderExists,setRepeat,dateString,incrementDate,changeDate,calSubmit,openForm,closeForm,openSettings,closeSettings,settingsEnter,createReminder,editReminder,deleteOnEnter,deleteReminder,save,load,downloadData,uploadData} = require('./scripttester.js');
 
 // Replace the original function with the mock function
 
@@ -73,8 +73,8 @@ var timeInput = document.getElementById("TIME");
 var emailInput = document.getElementById("email");
 var repeatInput = document.getElementById("repeat-amount");
 
-var repeatMode = "never";
 var repeatAmount = 0;
+var repeatMode = "never";
 
 test('dateString(date)', () => {
   let TodaysDate = new Date('3/3/2023');
@@ -116,11 +116,13 @@ test('createReminder()', () => {
 });
 
 test('deleteReminder()',() => {
-var reminders = [];
 var TodaysDate = new Date(2023, 2, 3);
 var time = '10:00 AM';
-  createReminder('HEADER','BODY',dateString(TodaysDate),time);
-  
+var numReminders = reminders.length;
+createReminder('HEADER','BODY',dateString(TodaysDate),time);
+expect(reminders.length).toBe(numReminders+1);
+deleteReminder(numReminders-1);
+expect(reminders.length).toBe(numReminders);
 });
 
 
@@ -182,21 +184,6 @@ test('save() and load()', () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 test('createNode()', () => {
   // Set up the inputs for the function
   headerInput.value = "test header #1";
@@ -204,7 +191,7 @@ test('createNode()', () => {
   dateInput.value = "2023-04-21";
   timeInput.value = "14:30:00";
   repeatInput.value = 1;
-  repeatMode = "daily";
+  setRepeat("daily");
   
   var initialLength = reminders.length;
   createNode();
@@ -230,17 +217,12 @@ test('createNode()', () => {
 test("formEnter() creates reminder and refreshes view if input is valid", () => {
   
   // arrange
-var headerInput = dom.window.document.getElementById("HEADER");
 headerInput.value = "Test Reminder";
-var bodyInput = dom.window.document.getElementById("bodyText");
 bodyInput.value = "Test reminder body text.";
-var dateInput = dom.window.document.getElementById("DATE");
 dateInput.value = "2023-04-24";
-var timeInput = dom.window.document.getElementById("TIME");
-timeInput.value = "10:00";
-var emailInput = dom.window.document.getElementById("email");
+timeInput.value = "10:00:00";
 
-var repeatMode = "never";
+setRepeat("never");
 var repeatAmount = 0;
 const initialLength = reminders.length;
 global.alert = jest.fn();
@@ -251,8 +233,7 @@ formEnter();
 // assert
 expect(global.alert).not.toHaveBeenCalled();
 expect(reminders.length).toBe(initialLength + 1);
-expect(reminders[initialLength].header).toBe("Test Reminder");
-expect(reminders[initialLength].body).toBe("Test reminder body text.");
-expect(reminders[initialLength].date).toBe("4/25/2023");
-expect(reminders[initialLength].time).toBe("10:00 AM");
+expect(reminderExists("Test Reminder", "4/24/2023", "10:00 AM")).toBe(true);
 });
+
+

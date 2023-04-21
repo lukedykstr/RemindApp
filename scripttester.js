@@ -35,10 +35,9 @@ function createNode() {
   // date value from date input is in YYYY-MM-DD form and is one day behind
   // for some reason, idk why
   // this changes it to MM/DD/YYYY and increments it by 1
-  date.setDate(date.getDate() + 1);
   // add reminder to list
   createReminder(headerInput.value, bodyInput.value, dateString(date), convertTime(timeInput.value));
-
+  
   if (repeatMode !== "never") {
     for (i = 0; i < repeatAmount; i += 1) {
       if (repeatMode === "daily") {
@@ -383,4 +382,4 @@ window.onload = function init() {
 
 
 //needs to be commetted out if not testing
-module.exports = { reminders,createNode,convertTime,createDate,formEnter,reminderExists,setRepeat,dateString,incrementDate,changeDate,calSubmit,openForm,closeForm,openSettings,closeSettings,settingsEnter,createReminder,editReminder,deleteOnEnter,deleteReminder,save,load,downloadData,uploadData,headerInput,bodyInput,dateInput,timeInput,emailInput,repeatMode,repeatAmount,repeatInput};
+module.exports = { reminders,createNode,convertTime,createDate,formEnter,reminderExists,setRepeat,dateString,incrementDate,changeDate,calSubmit,openForm,closeForm,openSettings,closeSettings,settingsEnter,createReminder,editReminder,deleteOnEnter,deleteReminder,save,load,downloadData,uploadData,headerInput,bodyInput,dateInput,timeInput,emailInput,repeatAmount,repeatInput,repeatMode};
