@@ -54,7 +54,6 @@ function createNode() {
   }
 
   save();
-  createView();
 }
 
 // converts 24hr time to 12hr time
@@ -136,8 +135,7 @@ function formEnter() {
   }
 
   createNode();
-  closeForm();
-  createView();
+  
   return 0;
 }
 
@@ -192,13 +190,13 @@ function incrementDate(dateInput, increment) {
 function changeDate(amount) {
   DisplayDate =
     incrementDate(DisplayDate, amount);
-  createView();
+  
 }
 
 // sets display date to calendar input value and updates daily view
 function calSubmit() {
   DisplayDate = new Date(document.getElementById("DisDate").value + "T00:00:00");
-  createView();
+  
 }
 
 // shows the form. set arg to 'reminder' to show create reminder form
@@ -309,7 +307,7 @@ function deleteOnEnter(index) {
 function deleteReminder(index) {
   reminders.splice(index, 1);
   save();
-  createView();
+  
 }
 
 // save data from object to JSON file
@@ -324,8 +322,16 @@ function save() {
 // load data from localStorage
 function load() {
   if (localStorage.getItem("settings") !== null) {
-    reminders = JSON.parse(localStorage.getItem("reminders"));
-    settings = JSON.parse(localStorage.getItem("settings"));
+    const remindersString = localStorage.getItem("reminders");
+    if (remindersString !== null && remindersString !== undefined) {
+      reminders = JSON.parse(remindersString);
+    }
+    const settingsJSON = localStorage.getItem("settings");
+    if (settingsJSON !== null && settingsJSON !== undefined) {
+      const parsedSettings = JSON.parse(settingsJSON);
+      settings.email = parsedSettings.email !== null ? parsedSettings.email : settings.email;
+      settings.notifs = parsedSettings.notifs !== null ? parsedSettings.notifs : settings.notifs;
+    }
   }
 }
 
@@ -372,5 +378,9 @@ window.onload = function init() {
 
   changeView(1);
   load();
-  createView();
+  
 };
+
+
+//needs to be commetted out if not testing
+module.exports = { reminders,createNode,convertTime,createDate,formEnter,reminderExists,setRepeat,dateString,incrementDate,changeDate,calSubmit,openForm,closeForm,openSettings,closeSettings,settingsEnter,createReminder,editReminder,deleteOnEnter,deleteReminder,save,load,downloadData,uploadData,headerInput,bodyInput,dateInput,timeInput,emailInput,repeatMode,repeatAmount,repeatInput};

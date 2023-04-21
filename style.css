@@ -15,11 +15,6 @@ html, body {
   */
 }
 
-
-body::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
-}
-
 #Canvas {
   position: absolute;
   left: max(22.5%, 200px);
@@ -47,16 +42,6 @@ body::-webkit-scrollbar {
   top: max(10%, 75px);
   width: 45%;
   height: 60%;
-  padding:0;
-  margin: 0;
-}
-
-#MonthlyView, #WeeklyView  {
-  position: absolute;
-  left: max(50%, 150px);
-  top: max(10%, 75px);
-  width: 40%;
-  min-width: calc(40%,150px);
   padding:0;
   margin: 0;
 }
@@ -116,7 +101,6 @@ h1 {
 
 #MainHeader p {
   margin: 2%;
-  
 }
 
 #LeftColumn {
@@ -211,7 +195,6 @@ h1 {
   width: 100%;
 }
 
-
 #RemindContainer::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
@@ -241,11 +224,6 @@ h1 {
   
 }
 
-.RemindH {
-  margin-top: 10px;
-  text-decoration: underline;
-}
-
 .RemindP {
   margin: 500 px;
 }
@@ -261,7 +239,6 @@ h1 {
 
 #DailyView {
   text-align:center;
-  
 }
 
 .arrow {

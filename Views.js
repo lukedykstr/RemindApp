@@ -104,16 +104,16 @@ function createView() {
 ////////////////////WEEKLY VIEW//////////////////////////////////////
 
 const calendar2 = document.querySelector("#WEEKLYVIEW");
-const options = { day: "numeric",month: "short",weekday: "short"};
+const options = { day: "numeric", month: "short", weekday: "short" };
 function createWeeklyView() {
 
   const weekStart = getWeekStart(DisplayDate);
   const weekEnd = getWeekEnd(DisplayDate);
   var day = 0;
-  for ( day = 0; day < 7; day+=1) {
+  for (day = 0; day < 7; day += 1) {
     const tempDate = new Date(weekStart);
     tempDate.setDate(weekStart.getDate() + day);
-    const count = reminders.filter((reminder)=>reminder.date===dateString(tempDate)).length;
+    const count = reminders.filter((reminder) => reminder.date === dateString(tempDate)).length;
 
     calendar2.insertAdjacentHTML("beforeend",
       `<div class="day">
@@ -146,21 +146,21 @@ function createMonthlyView() {
   var day = 0;
   var i = 0;
   document.getElementById("MonthlyText").innerHTML = getCurrentMonthText(DisplayDate);
-  for(numWeekDays = 0; numWeekDays < 7; numWeekDays+=1) {
-    calendar.insertAdjacentHTML("beforeend",`<div class="day">${daysOfWeek[numWeekDays]}</div>`);
+  for (numWeekDays = 0; numWeekDays < 7; numWeekDays += 1) {
+    calendar.insertAdjacentHTML("beforeend", `<div class="day">${daysOfWeek[numWeekDays]}</div>`);
   }
-  for (Empty = 0; Empty < getFirstDayOfMonth(); Empty+=1) {
+  for (Empty = 0; Empty < getFirstDayOfMonth(); Empty += 1) {
     calendar.insertAdjacentHTML("beforeend",
       `<div class="day"></div>`);
   }
 
-  for (day = 1; day <= getDaysInMonth(); day+=1) {
+  for (day = 1; day <= getDaysInMonth(); day += 1) {
     //later for the number of reminders per thing
     const tempDate = DayOfMonth(day);
     var count = 0;
     for (i = 0; i < reminders.length; i += 1) {
       if (tempDate === "all" || reminders[i].date === tempDate) {
-        count+=1;
+        count += 1;
       }
     }
     calendar.insertAdjacentHTML("beforeend",
@@ -176,10 +176,7 @@ function switchDay(day) {
   DisplayDate.setDate(day);
 
 }
-function getDay(day) {
-  const tempDate = new Date(DisplayDate);
-  return new Date(tempDate.setDate(day));
-}
+
 
 function getCurrentMonthText(date) {
   return date.toLocaleString("default", { month: "long" });
@@ -240,3 +237,6 @@ function changeView(which) {
     view = 3;
   }
 }
+
+
+module.exports = {loadReminders,loadNode,createView,createWeeklyView,getWeekStart,getWeekEnd,createMonthlyView,switchDay,getCurrentMonthText,getDaysInMonth,getFirstDayOfMonth,DayOfMonth,changeMonth,changeView};
