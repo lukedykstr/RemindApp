@@ -239,4 +239,4 @@ function changeView(which) {
 }
 
 
-module.exports = {loadReminders,loadNode,createView,createWeeklyView,getWeekStart,getWeekEnd,createMonthlyView,switchDay,getCurrentMonthText,getDaysInMonth,getFirstDayOfMonth,DayOfMonth,changeMonth,changeView};
+//module.exports = {loadReminders,loadNode,createView,createWeeklyView,getWeekStart,getWeekEnd,createMonthlyView,switchDay,getCurrentMonthText,getDaysInMonth,getFirstDayOfMonth,DayOfMonth,changeMonth,changeView};
