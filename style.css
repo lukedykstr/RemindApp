@@ -60,7 +60,7 @@ html, body {
   max-width: 35%;
 }
 
-#CanvasHeader {
+#CanvasHeader,#WeeklyCanvasHeader,#MonthlyCanvasHeader{
   position: relative;
   border-bottom: 5px solid black;
 }
@@ -230,7 +230,7 @@ h1 {
 
 /*Arrow formatting*/
 
-#CanvasHeader {
+#CanvasHeader,#WeeklyCanvasHeader,#MonthlyCanvasHeader {
   display:flex;
   flex-direction: row;
   align-items: center;
